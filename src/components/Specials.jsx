@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 const specials = [
   {
     src: 'https://images.unsplash.com/photo-1715663760578-f3081f3c7105?ixid=M3w3OTkxMTl8MHwxfHNlYXJjaHwxfHxUcnVmZmxlJTIwU2NyYW1ibGV8ZW58MHwwfHx8MTc2MzI2ODE0NXww&ixlib=rb-4.1.0&w=1600&auto=format&fit=crop&q=80',
-    title: 'Truffle Scramble',
+    title: "Truffle Scramble",
     link: '/menu',
   },
   {
@@ -33,30 +33,62 @@ export default function Specials() {
   return (
     <section className="py-16 bg-zinc-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 text-center">
-          <h3 className="text-2xl font-semibold text-zinc-900">Chef's Specials</h3>
-          <p className="mt-2 text-zinc-600">Limited-time dishes crafted with seasonal ingredients.</p>
+        <div className="mb-10 text-center">
+          <h3 className="text-3xl font-semibold tracking-tight text-zinc-900">Chef's Specials</h3>
+          <p className="mt-2 text-zinc-600">A spinning showcase of our featured dishes — tap any to explore.</p>
         </div>
-        <div className="grid md:grid-cols-3 gap-6">
-          {specials.map((item, i) => (
-            <a
-              key={i}
-              href={item.link}
-              className={`group relative overflow-hidden rounded-xl shadow-md bg-white block aspect-[4/3]`}
-            >
-              <img
-                src={item.src}
-                alt={item.title}
-                className={`absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${i === active ? '' : 'opacity-80'}`}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                <h4 className="text-white text-lg font-medium">{item.title}</h4>
-                <span className="text-white/80 text-sm">View</span>
-              </div>
-            </a>
-          ))}
+
+        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+          {specials.map((item, i) => {
+            const isActive = i === active
+            // Different spin timing and direction per item for a lively feel
+            const spin = [
+              'animate-[spin_14s_linear_infinite]',
+              'animate-[spin_18s_linear_infinite] [animation-direction:reverse]',
+              'animate-[spin_16s_linear_infinite]'
+            ][i % 3]
+
+            return (
+              <a
+                key={i}
+                href={item.link}
+                className="group block"
+                aria-label={`${item.title} — view details`}
+              >
+                <div className="relative mx-auto aspect-square w-64 sm:w-72 md:w-64 lg:w-72 rounded-full overflow-hidden ring-1 ring-black/5 shadow-xl bg-white">
+                  <img
+                    src={item.src}
+                    alt={item.title}
+                    className={[
+                      'absolute inset-0 h-full w-full object-cover rounded-full',
+                      spin,
+                      'transition-transform duration-500',
+                      'hover:[animation-play-state:paused]',
+                      isActive ? 'scale-105' : 'scale-100 opacity-90'
+                    ].join(' ')}
+                  />
+
+                  {/* subtle vignette for depth */}
+                  <div className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
+                  {/* Focus ring on the active one */}
+                  <div
+                    className={[
+                      'pointer-events-none absolute inset-0 rounded-full',
+                      isActive ? 'ring-2 ring-zinc-900/40' : 'ring-0'
+                    ].join(' ')}
+                  />
+                </div>
+                <div className="mt-4 text-center">
+                  <h4 className="text-lg font-medium text-zinc-900">{item.title}</h4>
+                  <p className="text-sm text-zinc-600 group-hover:text-zinc-900 transition-colors">View details →</p>
+                </div>
+              </a>
+            )
+          })}
         </div>
+
+        <p className="mt-8 text-center text-xs text-zinc-500">Hover to pause the spin. Images are illustrative.</p>
       </div>
     </section>
   )
