@@ -56,17 +56,22 @@ export default function Specials() {
                 aria-label={`${item.title} — view details`}
               >
                 <div className="relative mx-auto aspect-square w-64 sm:w-72 md:w-64 lg:w-72 rounded-full overflow-hidden ring-1 ring-black/5 shadow-xl bg-white">
-                  <img
-                    src={item.src}
-                    alt={item.title}
+                  {/* Rotating layer: ensure perfect center-origin rotation */}
+                  <div
                     className={[
-                      'absolute inset-0 h-full w-full object-cover rounded-full',
+                      'absolute inset-0 rounded-full',
                       spin,
-                      'transition-transform duration-500',
-                      'hover:[animation-play-state:paused]',
-                      isActive ? 'scale-105' : 'scale-100 opacity-90'
+                      'origin-center will-change-transform',
+                      'group-hover:[animation-play-state:paused]'
                     ].join(' ')}
-                  />
+                  >
+                    <img
+                      src={item.src}
+                      alt={item.title}
+                      className="h-full w-full rounded-full object-cover select-none pointer-events-none"
+                      draggable={false}
+                    />
+                  </div>
 
                   {/* subtle vignette for depth */}
                   <div className="pointer-events-none absolute inset-0 rounded-full bg-gradient-to-t from-black/20 via-transparent to-transparent" />
